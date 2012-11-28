@@ -19,8 +19,9 @@ function Assign(generations, popSize) {
 	 * is given to while false. Intuitively, who do you want to give to, and who
 	 * do you *not* want to give to.
 	 */
-    function Person(family, name, give, take) {
+    function Person(family, email, name, give, take) {
         this.family = family;
+		this.email = email;
         this.name = name;
 		this.give = give || {}
 		this.take = take || {}
@@ -31,27 +32,27 @@ function Assign(generations, popSize) {
 	//
 	var initial = initial || [
 		// 0
-        new Person(1, "Little Joe"),
-        new Person(1, "Anne"),
-        new Person(1, "Michael"),
+        new Person(1, "0@example.com", "Little Joe"),
+        new Person(1, "1@example.com", "Anne"),
+        new Person(1, "2@example.com", "Michael"),
 
 		// 3
-        new Person(0, "Uncle Joe"),
-        new Person(0, "Sophie", {}, {11: false, 12: false}),
-        new Person(0, "Robert (Bobbie)", {7: true}),
-		new Person(0, "Sue (Bobbie's fiancé)", {2: true}, {2: true}),
-        new Person(0, "Laura", {1: true}, {1: true}),
+        new Person(0, "3@example.com", "Uncle Joe"),
+        new Person(0, "4@example.com", "Sophie", {}, {11: false, 12: false}),
+        new Person(0, "5@example.com", "Robert (Bobbie)", {7: true}),
+		new Person(0, "6@example.com", "Sue (Bobbie's fiancé)", {2: true}, {2: true}),
+        new Person(0, "7@example.com", "Laura", {1: true}, {1: true}),
 
 		// 8
-        new Person(2, "Steph"),
-        new Person(2, "Jonathan"),
-        new Person(2, "Ned"),
+        new Person(2, "8@example.com", "Steph"),
+        new Person(2, "9@example.com", "Jonathan"),
+        new Person(2, "a@example.com", "Ned"),
 
 		// 11
-        new Person(3, "Mary", {1: false}),
-        new Person(3, "Susan", {1: false}),
-        new Person(3, "Suzette", {8: true, 8: true}),
-        new Person(3, "Ferdinand"),
+        new Person(3, "b@example.com", "Mary", {1: false}),
+        new Person(3, "c@example.com", "Susan", {1: false}),
+        new Person(3, "d@example.com", "Suzette", {8: true, 8: true}),
+        new Person(3, "e@example.com", "Ferdinand"),
 	];
 
     function swap(data, a, b) {
@@ -78,7 +79,7 @@ function Assign(generations, popSize) {
 			}
             var out = []
 			for (i=0, j=initial.length; i<initial.length; i++, j++) {
-                out.push(initial[i].name + " " + this.evaluateSingle(i, this.data, rdata));
+                out.push(initial[i].email + " \t" + initial[i].name + " " + this.evaluateSingle(i, this.data, rdata));
                 out.push("->\t" + initial[this.data[i]].name);
                 out.push("->\t" + initial[this.data[j]].name);
                 out.push("<-\t" + initial[rdata[i]].name);
@@ -151,10 +152,10 @@ function Assign(generations, popSize) {
             var c1 = new AChromosome(d1)
             var c2 = new AChromosome(d2)
             if (jv.isDebug()) {
-                jv.debug("A:  " + da.dump())
-                jv.debug("B:  " + db.dump())
-                jv.debug("C1: " + c1.dump())
-                jv.debug("C2: " + c2.dump())
+                jv.debug("A:  " + this.show(da))
+                jv.debug("B:  " + this.show(db))
+                jv.debug("C1: " + this.show(d1))
+                jv.debug("C2: " + this.show(d2))
             }
             return [new AChromosome(d1), new AChromosome(d2)];
 		}

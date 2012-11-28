@@ -416,12 +416,14 @@ jv.GA.prototype = {
      * called after crossover()
      */
     replace: function() {
+        this.dump("Replacing individuals:")
         var nextgen = [].concat(
             this.population.slice(0, this.elitism),
             this.children)
         for (var i=this.population.length-1, j=0; j<nextgen.length; i--, j++) {
             this.population[i] = nextgen[j]
         }
+        this.dump("Individuals replaced")
         return this
     },
     /**

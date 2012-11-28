@@ -196,8 +196,8 @@ function Assign(generations, popSize, splits, groupSize, studentLeadership, stud
             if (jv.isDebug()) {
                 jv.debug("A:  " + this.pretty(da))
                 jv.debug("B:  " + this.pretty(db))
-                jv.debug("C1: " + c1.dump())
-                jv.debug("C2: " + c2.dump())
+                jv.debug("C1: " + this.show(d1))
+                jv.debug("C2: " + this.show(d2))
             }
             return [new AChromosome(d1), new AChromosome(d2)];
         }

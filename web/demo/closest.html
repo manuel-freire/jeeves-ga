@@ -39,21 +39,25 @@
                 var pop = $("#ps").slider("value");
 				console.log(iterations, pop);
 				
-                ga = Assign(iterations, pop);
+                ga = Simple(iterations, pop);
                 return ga
             }
             function whenFinished() {
-				console.log(ga.bestChromosome.pretty());
+				var best = ga.bestChromosome.pretty();
+				$("#jv-tabs-answ-Closest pre").remove();
+				$("#jv-tabs-answ-Closest").append(
+					$("<pre>"+best+"</pre>"));
+				console.log(best);
             }            
             var controls = [
                 new jv.SliderControl("gs", "Generations", "100",
                     {min: 100, max: 1000, value: 100, step: 100}, "less" , "more"),
-                new jv.SliderControl("ps", "Population", "50",
-                    {min: 50, max: 200, value: 50}, 
+                new jv.SliderControl("ps", "Population", "5",
+                    {min: 5, max: 30, value: 5}, 
                     "less" , "more")
             ]                 
             $(function() {
-                jv.UI("Highest", 
+                jv.UI("Closest", 
                     {main: "Main", conv: "Convergence",  answ: "Result", log: "Log"},
                     {start: "Run", stop: "Cancel"},
                     controls, createGA, whenFinished)                 
@@ -61,12 +65,12 @@
         </script>
     </head>
     <body>
-        <h1>Highest point</h1>        
-        <div id="Highest"></div>
+        <h1>Closest point</h1>        
+        <div id="Closest"></div>
         <p>
-			finds an allocation of presents between 4 families such that everyone gives and receives 2 presents, 
-			people do not give presents to their own families (including themselves), and they never give presents
-			twice to the same person. Other restrictions could be easily be coded in.
+	       finds the closest 2d coordinate to (.5, .5), starting from a set of
+		   random points in the square (0,0)-(2,2) and using "midpoints" as
+		   crossover function.
         </p>
     </body>
 </html>

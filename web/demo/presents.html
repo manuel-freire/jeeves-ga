@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Jeeves demos</title>
 
         <!-- ProtoVis -->
         <script type="text/javascript" src="../lib/protovis.min.js"></script>
@@ -43,21 +43,25 @@
                 return ga
             }
             function whenFinished() {
-				console.log(ga.bestChromosome.pretty());
+				var best = ga.bestChromosome.pretty();
+				$("#jv-tabs-answ-Sorteo pre").remove();
+				$("#jv-tabs-answ-Sorteo").append(
+					$("<pre>"+best+"</pre>"));
+				console.log(best);
             }            
             var controls = [
-                new jv.SliderControl("gs", "Generaciones", "100",
-                    {min: 100, max: 1000, value: 100, step: 100}, "menos" , "más"),
-                new jv.SliderControl("ps", "Población", "50",
+                new jv.SliderControl("gs", "Generations", "100",
+                    {min: 100, max: 1000, value: 100, step: 100}, "less" , "more"),
+                new jv.SliderControl("ps", "Population", "50",
                     {min: 50, max: 200, value: 50}, 
-                    "menor población" , "mayor población")
+                    "less" , "more")
             ]                 
             $(function() {
                 jv.UI("Sorteo", 
-                    {main: "Principal", conv: "Convergencia",  answ: "Resultado", log: "Log"},
-                    {start: "Lanzar", stop: "Cancelar"},
-                    controls, createGA, whenFinished)                 
-            })
+                    {main: "Main", conv: "Convergence",  answ: "Result", log: "Log"},
+                    {start: "Run", stop: "Cancel"},
+                    controls, createGA, whenFinished)
+			})
         </script>
     </head>
     <body>

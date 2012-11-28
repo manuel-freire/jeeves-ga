@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Jeeves demos</title>
 
         <!-- ProtoVis -->
         <script type="text/javascript" src="../lib/protovis.min.js"></script>
@@ -26,15 +26,15 @@
         <script type="text/javascript" src="../lib/jeeves-1.0.js"></script>
         
         <!-- actual problem-solving code -->
-        <script type="text/javascript" src="nucleo.js"></script>
         <script type="text/javascript" src="nucleo-data.js"></script>               
+        <script type="text/javascript" src="nucleo.js"></script>
         <script type="text/javascript">                      
             var ga;
             function createGA() {
                 var q = 1+Math.floor($("#qs").slider("value") / 10)
                 var size = $("#gs").slider("value")
                 ga = Assign(q*10, q*25, 100, 
-                    size, stLeadership, stHate, leaderWeight)
+                    size, stLeadership, stHate, .5)
                 return ga
             }
             function whenFinished() {

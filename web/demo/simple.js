@@ -2,46 +2,47 @@
  * Creates a fully-configured Jeeves GA 
  * that finds the highest point in a set
  */
-function Simple(iterationsPerStep) {
+function Simple(generations, popSize) {
 
-    jv.logLevel = jv.logLevels.INFO
-
-    // euclidean distance
-    function dist(x1, y1, x2, y2) {
-        var dx = x1-x2
-        var dy = y1-y2
-        return Math.sqrt(dx*dx + dy*dy)
-    }
+    jv.logLevel = jv.logLevels.DEBUG
 
     // a chromosome for finding the x,y pair that is closest to .5,.5
     var SimpleChromosome = jv.createChromosome({
+		pretty: function() {
+			return this.show(this.data);
+		},
         show: function(data) { 
             return "(" + data.x + ", " + data.y + ")"
         },
         evaluate: function(data) {
-            return dist(data.x, data.y, .5, .5);
+			var dx = data.x - .5;
+			var dy = data.y - .5;
+			return dx*dx + dy*dy;
         },
+        copyData: function(data) {
+            return {x: data.x, y: data.y};
+        },		
         mutate: function(data) {
             if (jv.random() < .5) {
-                data.x += (jv.random()-.5)
+                data.x += (jv.random()-.5)*.1
             } else {
-                data.y += (jv.random()-.5)
+                data.y += (jv.random()-.5)*.1
             }            
         },
         initialize: function() {
             return {x:jv.random() * 2, y:jv.random() * 2}
         },
-        pairCrossover: function(data, other) {
+        crossover: function(data, other) {
 			var a = data;
 			var b = other;
-            var c = new SimpleChromosome({
-                x:(a.data.x + b.data.x)/2, 
-                y:(a.data.y + b.data.y)/2
-            });
+            var c = {
+                x:(a.x + b.x)/2, 
+                y:(a.y + b.y)/2
+            };
             if (jv.isDebug()) {
-                jv.debug("A::" + a.dump())
-                jv.debug("B::" + b.dump())
-                jv.debug("C::" + c.dump())             
+                jv.debug("A::" + this.show(a))
+                jv.debug("B::" + this.show(b))
+                jv.debug("C::" + this.show(c))
             }
             return [new SimpleChromosome(c)];
         }		
@@ -53,9 +54,9 @@ function Simple(iterationsPerStep) {
 		plotData: [],
 		
         chromosome: SimpleChromosome,
-        maxIterations: iterationsPerStep,
-        populationCount: 10,
-        mutationRate: .2,
+        maxIterations: generations,
+        populationCount: popSize,
+        mutationRate: .05,
         selectParents: jv.Selections.roulette,
         refineFitness: jv.Refinements.createNormalizer(.1, true),
         reset: function() {
