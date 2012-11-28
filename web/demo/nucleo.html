@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+
+        <!-- ProtoVis -->
+        <script type="text/javascript" src="../lib/protovis.min.js"></script>
+
+        <!-- jQuery + JQuery UI -->
+        <link rel="stylesheet" href="../lib/css/ui-lightness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+        <script type="text/javascript" src="../lib/jquery/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../lib/jquery/jquery-ui-1.8.16.custom.min.js"></script>        
+
+        <style type="text/css">
+            .jv-control-label { width: 12em; height: 2em; vertical-align: top; display: inline-block;}
+            .jv-control-container { width: 30em; height: 2em; display: inline-block;}
+            .jv-slider-low { font-size: 80%; float: left;}
+            .jv-slider-high { font-size: 80%; float: right;}
+            .jv-control-vlabel { font-weight: bold; padding-left: 4px; }
+            .jv-plot { background-color: white;}
+        </style>
+        
+        <!-- Jeeves -->
+        <script type="text/javascript" src="../lib/jeeves-1.0.js"></script>
+        
+        <!-- actual problem-solving code -->
+        <script type="text/javascript" src="nucleo.js"></script>
+        <script type="text/javascript" src="nucleo-data.js"></script>               
+        <script type="text/javascript">                      
+            var ga;
+            function createGA() {
+                var q = 1+Math.floor($("#qs").slider("value") / 10)
+                var size = $("#gs").slider("value")
+                ga = Assign(q*10, q*25, 100, 
+                    size, stLeadership, stHate, leaderWeight)
+                return ga
+            }
+            function whenFinished() {
+                plotBest(600, 200, ga.bestChromosome.plottable(
+                    ga.bestChromosome.data), "jv-plot-answ-nucleo")
+            }            
+            var controls = [
+                new jv.SliderControl("gs", "Tamaño (alumnos)", "3",
+                    {min: 2, max: 8, value: 3, step: 1}, "menos" , "más"),
+                new jv.SliderControl("bs", "Prioridad", "50",
+                    {min: 0, max: 100, value: 50}, 
+                    "separar malas parejas" , "equilibrar bien grupos"),
+                new jv.SliderControl("qs", "Calidad/tiempo", "50",
+                    {min: 0, max: 100, value: 50}, 
+                    "peor calidad, rápido" , "mejor calidad, lento"),
+            ]                 
+            $(function() {
+                jv.UI("nucleo", 
+                    {main: "Principal", conv: "Convergencia", 
+                     answ: "Resultado", log: "Log"},
+                    {start: "Lanzar", stop: "Cancelar"},
+                    controls, createGA, whenFinished)                 
+            })
+        </script>
+    </head>
+    <body>
+        <h1>Nucleo</h1>        
+        <div id="nucleo"></div>
+        <p>
+            used within an experimental moodle plugin; creates collaborative 
+            groups of students so that the total grades of groups are as 
+            balanced as possible, while taking into account pairwise "dislikes" 
+            between students: each student keeps a 
+            "do not want to work with again" list.
+        </p>
+    </body>
+</html>

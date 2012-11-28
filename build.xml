@@ -1,0 +1,84 @@
+<!--
+  Jeeves, a simple JS generic genetic algorithm library, designed
+  to be (somewhat) Wooster-friendly. Right ho!
+
+  author: manuel.freire@fdi.ucm.es
+  copyright: 2011, e-UCM, Universidad Complutense de Madrid
+  license: GNU LGPL v3 or later; contact authors for other licenses
+-->
+<project name="Jeeves" basedir=".">
+
+    
+    <!-- directories -->
+    <property name="srcDir" value="src"/>
+    <property name="testDir" value="test"/>
+    <property name="docDir" value="doc"/>
+    <property name="libDir" value="web/lib"/>
+
+    <!-- Jeeves output -->
+    <property name="version" value="1.0"/>
+    <property name="target" value="${libDir}/jeeves-${version}.js"/>
+    
+    <!-- external tools -->
+    <property name="jsdoc-home" location="ext/jsdoc-toolkit"/>
+    <property name="jsdoc-toolkit-jar" value="${jsdoc-home}/jsrun.jar"/>
+    <property name="closure-jar" value="ext/compiler.jar"/>
+
+    <!-- external tasks -->
+    <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+               classpath="${closure-jar}"/>
+
+    <!-- run js-doc on jeeves -->
+    <target name="doc">
+        <mkdir dir="${docDir}"/>
+        <java jar="${jsdoc-toolkit-jar}">
+            <arg value="${jsdoc-home}/app/run.js"/>
+            <arg value="-w"/>
+            <arg value="-p"/>
+            <arg value="-d=${docDir}"/>
+            <arg value="-t=${jsdoc-home}/templates/jsdoc"/>
+            <arg value="${srcDir}/"/>
+        </java>
+    </target>
+
+    <!-- run closure-compiler on jeeves -->
+    <target name="compile">
+        <jscomp  
+            compilationLevel="simple"
+            warning="verbose"
+            debug="true"
+            prettyprint="true"
+            output="${target}">
+            <externs dir="${libDir}">
+                <file name="closure-externs/webkit_console.js"/>
+                <file name="protovis.min.js"/>
+                <file name="closure-externs/jquery-1.6.js"/>
+            </externs>
+
+            <sources dir="${srcDir}">
+                <file name="jeeves.js"/>
+                <file name="jeeves-util.js"/>
+                <file name="jeeves-log.js"/>
+                <file name="jeeves-ui.js"/>
+            </sources>
+        </jscomp>
+    </target>
+
+<!--                           -->
+<!--   MAIN GOAL               -->
+<!--                           -->
+    <target name="all"
+        depends="compile, doc"
+        description="Builds the whole project">
+    </target>
+
+<!--                           -->
+<!--   CLEANUP                 -->
+<!--                           -->
+    <target name="clean" description="Limpia el proyecto">
+        <delete dir="${buildDir}"/>
+        <delete dir="${distDir}"/>
+        <delete dir="${docDir}"/>
+    </target>
+
+</project>

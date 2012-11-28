@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+
+        <!-- ProtoVis -->
+        <script type="text/javascript" src="../lib/protovis.min.js"></script>
+
+        <!-- jQuery + JQuery UI -->
+        <link rel="stylesheet" href="../lib/css/ui-lightness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+        <script type="text/javascript" src="../lib/jquery/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript" src="../lib/jquery/jquery-ui-1.8.16.custom.min.js"></script>        
+
+        <style type="text/css">
+            .jv-control-label { width: 12em; height: 2em; vertical-align: top; display: inline-block;}
+            .jv-control-container { width: 30em; height: 2em; display: inline-block;}
+            .jv-slider-low { font-size: 80%; float: left;}
+            .jv-slider-high { font-size: 80%; float: right;}
+            .jv-control-vlabel { font-weight: bold; padding-left: 4px; }
+            .jv-plot { background-color: white;}
+        </style>
+        
+        <!-- Jeeves -->
+        <script type="text/javascript" src="../lib/jeeves-1.0.js"></script>
+        
+        <!-- actual problem-solving code -->
+        <script type="text/javascript" src="simple.js"></script>
+        <script type="text/javascript">                      
+            var ga;
+            function createGA() {
+                var iterations = $("#gs").slider("value");
+				iterations /= 100; // 100 increments in slider
+				if (iterations == 0) {
+					iterations ++;
+				}
+                var pop = $("#ps").slider("value");
+				console.log(iterations, pop);
+				
+                ga = Assign(iterations, pop);
+                return ga
+            }
+            function whenFinished() {
+				console.log(ga.bestChromosome.pretty());
+            }            
+            var controls = [
+                new jv.SliderControl("gs", "Generations", "100",
+                    {min: 100, max: 1000, value: 100, step: 100}, "less" , "more"),
+                new jv.SliderControl("ps", "Population", "50",
+                    {min: 50, max: 200, value: 50}, 
+                    "less" , "more")
+            ]                 
+            $(function() {
+                jv.UI("Highest", 
+                    {main: "Main", conv: "Convergence",  answ: "Result", log: "Log"},
+                    {start: "Run", stop: "Cancel"},
+                    controls, createGA, whenFinished)                 
+            })
+        </script>
+    </head>
+    <body>
+        <h1>Highest point</h1>        
+        <div id="Highest"></div>
+        <p>
+			finds an allocation of presents between 4 families such that everyone gives and receives 2 presents, 
+			people do not give presents to their own families (including themselves), and they never give presents
+			twice to the same person. Other restrictions could be easily be coded in.
+        </p>
+    </body>
+</html>
